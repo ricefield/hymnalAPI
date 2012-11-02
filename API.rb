@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'nokogiri'
+require 'open-uri'
 require 'sanitize'
 require 'jbuilder'
 # require 'haml'
@@ -48,15 +49,21 @@ get '/hymn/:id' do
         
         # extract lyrics
         lyrics = Hash.new
-        i = 1
-        page.css("div#lyrics")
+        for stanza in page.css("div#lyrics li") do
+            versetext = Array.new
+            for line in stanza.children do
+                if line.name == "text"
+                    # strip leading/trailing whitespace..?
+                    versetext << line.text
+            end
+            lyrics[stanza['value']] = versetext
+        end
 
-        
         # build JSON
         
     else
         # throw error in JSON
-
+    end
 
 end
 
