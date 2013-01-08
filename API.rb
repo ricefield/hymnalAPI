@@ -3,7 +3,7 @@ require 'sinatra'
 require 'nokogiri'
 require 'open-uri'
 require 'sanitize'
-require 'jbuilder'
+require 'json'
 # require 'haml'
 # require 'builder'
 
@@ -16,11 +16,15 @@ end
 
 # classic hymns
 get '/hymn/:id' do
+
+    content_type :json
     
     # {id} must be an int between 1-1348
     unless :id < 1 or :id > 1348
         hymnURL = "http://hymnal.net/hymn.php/h/#:id"
         page = Nokogiri::HTML(open(hymnURL))
+        # this will be exported to JSON
+        hymn = Hash.new
         
         # extract hymn details
         # i.e. category, meter, composer, etc.
@@ -49,17 +53,25 @@ get '/hymn/:id' do
         
         # extract lyrics
         lyrics = Hash.new
-        for stanza in page.css("div#lyrics li") do
-            versetext = Array.new
-            for line in stanza.children do
-                if line.name == "text"
-                    # strip leading/trailing whitespace..?
-                    versetext << line.text
-            end
-            lyrics[stanza['value']] = versetext
+        # external site redirect - scrape witness-lee-hymns.org
+        if page.css("div.lyrics p[class=info]").text == "View Lyrics (external site)"
+
         end
+        
+        # scrape hymnal.net
+        # cases:
+        #   - 1 stanza only
+        #   - numbered stanza
+        #   - numbered stanza w/ chorus
+        #   - numbered stanza w/ variable choruses
+        for 
+
+
 
         # build JSON
+        hymn['details'] = details
+        hymn['lyrics'] = lyrics
+        hymn.to_json
         
     else
         # throw error in JSON
