@@ -32,29 +32,11 @@ get '/hymn/:id' do
             n.replace("\n")
         end
         
-        # extract hymn details
+        # extract hymn details w/ link
         # i.e. category, meter, composer, etc.
         details = Hash.new
-        for element in page.css("ul#category") do
-            case(element.css("strong").text)
-                # when "Lead Sheets:"
-                when "Category:"
-                    details['category'] = element.css("a").text
-                when "Subcategory:"
-                    details['subcategory'] = element.css("a").text
-                when "Music:"
-                    details['composer'] = element.css("a").text
-                when "Lyrics:"
-                    details['author'] = element.css("a").text
-                when "Time:"
-                    details['time'] = element.css("a").text
-                when "Key:"
-                    details['key'] = element.css("a").text
-                when "Meter:"
-                    details['meter'] = element.css("a").text
-                when "Reference:"
-                    details['verse'] = element.css("a").text
-            end
+        for element in page.css("div#details li") do
+            details[element.css('span.key').text] = [element.css('a').text, element.css('a')[0][href]]
         end
         
         # extract lyrics
