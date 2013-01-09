@@ -94,6 +94,9 @@ get '/hymn/:id' do
         
     else
         # throw error in JSON
+        error = Hash.new
+        Hash['error'] = "Sorry, there is no hymn with that number. Hymn should be within the 1-1348 range."
+        error.to_json
     end
 
 end
