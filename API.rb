@@ -69,9 +69,21 @@ get '/hymn/:id' do
         
         # scrape hymnal.net
         for element in page.css(div.lyrics li) do
+            # verse numbers are denoted in <li value='1'> tags
             if element['value']
+                # store stanza as a list of lines
+                lyrics[element['value']] = element.text.split("\n")
+            end
 
-
+            # chorus(es) are denoted in <li class='chorus'> tags
+            if element['class']
+                unless lyrics.has_key?(element['class'])
+                    lyrics[element['class']] = element.text.split("\n")
+                # if there are multiple choruses:
+                else
+                    # append some whitespace to create a unique key
+                    lyrics[element['class'] + " " * lyrics.length] = element.text.split("\n")
+            end
 
 
 
