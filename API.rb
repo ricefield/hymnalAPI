@@ -47,6 +47,12 @@ get '/hymn/:id' do
             id = params[:id].rjust(4, '0')
             hymnURL = "http://www.witness-lee-hymns.org/hymns/H#{id}.html"
             page = Nokogiri::HTML(open(hymnURL))
+            # TODO: parse witness-lee-hymns.org
+            #
+            #
+            #
+            #
+            #
         end
         
         # scrape hymnal.net
