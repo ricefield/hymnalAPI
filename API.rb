@@ -20,7 +20,7 @@ get '/hymn/:id' do
     content_type :json
     
     # {id} must be an int between 1-1348
-    if Integer(params[:id]) > 0 or Integer(params[:id]) < 1349
+    if Integer(params[:id]) > 0 and Integer(params[:id]) < 1349
         hymnURL = "http://hymnal.net/hymn.php/h/#{params[:id]}"
         page = Nokogiri::HTML(open(hymnURL))
 
@@ -77,7 +77,6 @@ get '/hymn/:id' do
         hymn['title'] = page.css('div.post-title span').text.strip()
         hymn['details'] = details
         hymn['lyrics'] = lyrics
-
         hymn.to_json
         
     else
