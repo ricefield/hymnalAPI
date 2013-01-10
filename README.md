@@ -31,7 +31,7 @@ suggestions are welcome!
 EXAMPLES:
 ---------
 
-"[root]/hymn/1343" returns:
+calling "/hymn/1343" returns:
 
 {
 	title: "A new commandment",
