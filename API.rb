@@ -58,17 +58,16 @@ get '/hymn/:id' do
                 # verse numbers are denoted in <li value='1'> tags
                 if element['value']
                     # store stanza as a list of lines
-                    lyrics[element['value']] = element.text.split("\n")
-                end
+                    lyrics['stanza ' + element['value']] = element.text.split("\n")
 
                 # chorus(es) are denoted in <li class='chorus'> tags
-                if element['class']
+                elsif element['class']
                     if !lyrics.has_key?(element['class'])
                         lyrics[element['class']] = element.text.split("\n")
                     # if there are multiple choruses:
                     else
                         # append some whitespace to create a unique key
-                        lyrics[element['class'].ljust(lyrics.length, ' ')] = element.text.split("\n")
+                        lyrics[element['class'] + ' ' + String(1+lyrics.length/2)] = element.text.split("\n")
                     end
                 end
             end
@@ -78,6 +77,7 @@ get '/hymn/:id' do
         hymn['title'] = page.css('div.post-title span').text.strip()
         hymn['details'] = details
         hymn['lyrics'] = lyrics
+
         hymn.to_json
         
     else
