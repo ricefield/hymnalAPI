@@ -75,6 +75,7 @@ get '/hymn/:id' do
         end
 
         # build and return JSON
+        hymn['title'] = page.css('div.post-title span').text.strip()
         hymn['details'] = details
         hymn['lyrics'] = lyrics
         hymn.to_json
