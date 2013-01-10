@@ -1,6 +1,5 @@
-===============
-   hymnalAPI
-===============
+hymnalAPI
+=========
 
 a simple API for hymnal.net
 
@@ -28,7 +27,7 @@ features:
 
 suggestions are welcome!
 
-EXAMPLES:
+examples:
 ---------
 
 calling "/hymn/1343" returns:
