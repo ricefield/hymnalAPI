@@ -35,7 +35,6 @@ EXAMPLES:
 
 {
 	title: "A new commandment",
-
 	details: {
 		Category:: [
 			"Scriptures for Singing",
