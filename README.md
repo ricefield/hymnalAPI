@@ -33,7 +33,14 @@ EXAMPLES:
 
 calling "/hymn/1343" returns:
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+{
+>>>>>>> ah… had to remove outermost bracket…
 
+=======
+>>>>>>> ah… had to remove outermost bracket…
 	title: "A new commandment",
 	details: {
 		Category:: [
@@ -74,3 +81,7 @@ calling "/hymn/1343" returns:
 			"    If you have love one to another."
 		]
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> ah… had to remove outermost bracket…
