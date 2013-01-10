@@ -33,7 +33,6 @@ EXAMPLES:
 
 calling "/hymn/1343" returns:
 
-{
 
 	title: "A new commandment",
 	details: {
@@ -75,4 +74,3 @@ calling "/hymn/1343" returns:
 			"    If you have love one to another."
 		]
 	}
-}
