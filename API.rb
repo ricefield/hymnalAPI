@@ -20,7 +20,7 @@ get '/hymn/:id' do
     content_type :json
     
     # {id} must be an int between 1-1348
-    unless params[:id] < 1 or params[:id] > 1348
+    if Integer(params[:id]) > 0 or Integer(params[:id]) < 1349
         hymnURL = "http://hymnal.net/hymn.php/h/#{params[:id]}"
         page = Nokogiri::HTML(open(hymnURL))
 
@@ -36,7 +36,7 @@ get '/hymn/:id' do
         # i.e. category, meter, composer, etc.
         details = Hash.new
         for element in page.css("div#details li") do
-            details[element.css('span.key').text] = [element.css('a').text, element.css('a')[0][href]]
+            details[element.css('span.key').text] = [element.css('a').text, element.css('a')[0]['href']]
         end
         
         # extract lyrics
@@ -52,30 +52,29 @@ get '/hymn/:id' do
             #
             #
             #
-            #
+        else        
+            # scrape hymnal.net
+            for element in page.css('div.lyrics li') do
+                # verse numbers are denoted in <li value='1'> tags
+                if element['value']
+                    # store stanza as a list of lines
+                    lyrics[element['value']] = element.text.split("\n")
+                end
+
+                # chorus(es) are denoted in <li class='chorus'> tags
+                if element['class']
+                    if !lyrics.has_key?(element['class'])
+                        lyrics[element['class']] = element.text.split("\n")
+                    # if there are multiple choruses:
+                    else
+                        # append some whitespace to create a unique key
+                        lyrics[element['class'].ljust(lyrics.length, ' ')] = element.text.split("\n")
+                    end
+                end
+            end
         end
-        
-        # scrape hymnal.net
-        for element in page.css(div.lyrics li) do
-            # verse numbers are denoted in <li value='1'> tags
-            if element['value']
-                # store stanza as a list of lines
-                lyrics[element['value']] = element.text.split("\n")
-            end
 
-            # chorus(es) are denoted in <li class='chorus'> tags
-            if element['class']
-                unless lyrics.has_key?(element['class'])
-                    lyrics[element['class']] = element.text.split("\n")
-                # if there are multiple choruses:
-                else
-                    # append some whitespace to create a unique key
-                    lyrics[element['class'] + " " * lyrics.length] = element.text.split("\n")
-            end
-
-
-
-        # build JSON
+        # build and return JSON
         hymn['details'] = details
         hymn['lyrics'] = lyrics
         hymn.to_json
@@ -83,7 +82,7 @@ get '/hymn/:id' do
     else
         # throw error in JSON
         error = Hash.new
-        Hash['error'] = "Sorry, there is no hymn with that number. Hymn should be within the 1-1348 range."
+        error['error'] = "Sorry, there is no hymn with that number. Hymn should be within the 1-1348 range."
         error.to_json
     end
 
@@ -133,4 +132,3 @@ end
 get 'verse/:referece' do
     
 end
-
