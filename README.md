@@ -34,6 +34,7 @@ EXAMPLES:
 calling "/hymn/1343" returns:
 
 {
+
 	title: "A new commandment",
 	details: {
 		Category:: [
