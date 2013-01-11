@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'sanitize'
 require 'json'
+require 'pp'
 # require 'haml'
 # require 'builder'
 
@@ -45,15 +46,35 @@ get '/hymn/:id' do
         if page.css("div.lyrics p[class=info]").text == "View Lyrics (external site)"
             # pad zeroes
             id = params[:id].rjust(4, '0')
-            hymnURL = "http://www.witness-lee-hymns.org/hymns/H#{id}.html"
+            hymnURL = page.css('div.lyrics p a')[0]['href']
             page = Nokogiri::HTML(open(hymnURL))
-            # TODO: parse witness-lee-hymns.org
-            #
-            #
-            #
-            #
+
+            # grab title
+            hymn['title'] = page.css('h1').text.strip()
+            # grab author
+            details['Lyrics:'] = page.search("[text()*='AUTHOR:']").first.parent.text.gsub("AUTHOR:", "").strip
+
+            # 
+            for element in page.css("table[width='500'] tr td") do
+                # only consider <td> if content is not whitespace
+                unless element.text.gsub(/[[:space:]]/, '') == ''
+                    # if stanza number
+                    if element.text.to_i > 0
+                        # create a new entry with an empty list
+                        lyrics['stanza ' + element.text.strip] = []
+                    # if chorus
+                    elsif element.text.gsub(/[[:space:]]/, '') == "Chorus"
+                        lyrics['chorus'] = []
+                    # if line
+                    else
+                        lyrics[lyrics.keys.last].push(element.text)
+                    end
+                end
+            end
+        # scrape hymnal.net
         else        
-            # scrape hymnal.net
+            # grab title
+            hymn['title'] = page.css('div.post-title span').text.strip()
             for element in page.css('div.lyrics li') do
                 # verse numbers are denoted in <li value='1'> tags
                 if element['value']
@@ -74,7 +95,6 @@ get '/hymn/:id' do
         end
 
         # build and return JSON
-        hymn['title'] = page.css('div.post-title span').text.strip()
         hymn['details'] = details
         hymn['lyrics'] = lyrics
         hymn.to_json
