@@ -1,6 +1,5 @@
-source 'http://rubygems.org'
+source :rubygems
 gem 'sinatra'
 gem 'nokogiri'
-gem 'open-uri'
-gem 'json'
-gem 'pp'
+
+
