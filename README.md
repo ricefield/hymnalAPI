@@ -11,12 +11,13 @@ features:
 ---------
 
 [completed]
+- classic hymns
 
 [in progress]
-- classic hymns (need to parse witness-lee-hymns.org)
+- new songs
 
 [planned]
-- new songs
+- PDFs and sheet music
 - hymnal.net search results
 - category
 - key
