@@ -1,7 +1,7 @@
 hymnalAPI
 =========
 
-a simple API for hymnal.net
+a simple API for hymnal.net. you can try a live demo at http://hymnalapi.herokuapp.com
 
 all hymn data is returned as JSON (see examples below)
 
